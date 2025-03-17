@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - SERVICES=dynamodb  # Alterado para DynamoDB
+      - DEFAULT_REGION=us-east-1
+      - DATA_DIR=/tmp/localstack/data
+    ports:
+      - "4566:4566"  # Porta para interagir com os serviços simulados
+      - "4510-4559:4510-4559"  # Portas para o acesso a outros serviços
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"  # Para acessar o Docker
+      - "localstack_volume:/tmp/localstack"
+    networks:
+      - localstack_network
+
+volumes:
+  localstack_volume:
+
+networks:
+  localstack_network:
+    driver: bridge
